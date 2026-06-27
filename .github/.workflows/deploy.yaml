@@ -1,24 +1,26 @@
-name : ec2 deployment
-on: 
+name: ec2 deployment
+
+on:
   push:
     branches:
-      -main
+      - main
 
 jobs:
   deploy:
-    runs_on: ubuntu latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: checkout source code
-      uses: actions/checkout@v6
-    - name: deploy via ssh
-      uses: appleboy/ssh-action@v1
-      with:
-        host: ${{secrets.SSH_HOST}}
-        username: ubuntu
-        key: ${{secrets.SSH_KEY}}
-        script:  |
-          cd ~/deploy
-          git pull
-          sudo docker compose down
-          sudo docker compose up -d --build
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/deploy
+            git pull
+            sudo docker compose down
+            sudo docker compose up -d --buildci
